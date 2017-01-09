@@ -1,0 +1,24 @@
+{
+    "background":{
+        "scripts": ["initialize.js"]
+    },
+
+    "description": "Provides meaning of highlighted words",
+    
+    "developer": {
+        "name": "Yeshwanth Arcot",
+        "url": "https://github.com/ysharc/"
+    },
+    
+    "homepage_url": "https://github.com/ysharc/look-up",
+    
+    "name": "Look-Up",
+    
+    "options_ui":{
+        "page": "options/options.html"
+    },
+    
+    "version": "0.0",
+
+    "web_accessible_resources": ["images/*.png"]
+}
