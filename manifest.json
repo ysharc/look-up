@@ -1,8 +1,19 @@
 {
-    "background":{
-        "scripts": ["initialize.js"]
+    "browser_action": {
+        "browser_style": true,
+        "default_icon": {
+            "16": "button/16.png",
+            "32": "button/32.png"
+        },
+        "default_title": "Hi There",
+        "default_popup": "popup/look-up.html"
     },
-
+    
+    "content_scripts":[{
+        "matches": ["<all_urls>"],
+        "js": ["look-up.js"]
+    }],
+    
     "description": "Provides meaning of highlighted words",
     
     "developer": {
@@ -12,13 +23,9 @@
     
     "homepage_url": "https://github.com/ysharc/look-up",
     
+    "manifest_version": 2,
+
     "name": "Look-Up",
     
-    "options_ui":{
-        "page": "options/options.html"
-    },
-    
-    "version": "0.0",
-
-    "web_accessible_resources": ["images/*.png"]
+    "version": "0.0"
 }
