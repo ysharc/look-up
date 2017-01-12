@@ -4,8 +4,8 @@ document.onmouseup = function() {
     var words = text.split(" ");
     for(var i in words){
         if(words[i]){
-            alert(words[i]);
-            console.log(httpGetAsync("http://api.pearson.com/v2/dictionaries/entries?headword=magic", parseJSON));
+			alert(words[i]);
+            httpGetAsync("http://api.pearson.com/v2/dictionaries/ldoce5/entries?headword=" + words[i] + "&apikey=#######################", reqListener);
         }
     }
 };
@@ -20,15 +20,37 @@ function getSelectedText() {
 }
 
 function httpGetAsync(url, callback) {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() { 
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            callback(xmlHttp.responseText);
-    }
-    xmlHttp.open("GET", url, false); // true for asynchronous 
-    xmlHttp.send(null);
+    var client = new XMLHttpRequest();
+    
+	client.addEventListener("load", callback);
+	client.open("GET", url, true);
+    client.send();
+
 }
 
-function parseJSON(jsonObject){
-    return JSON.parse(jsonObject);
+function reqListener() {
+	text = this.responseText;
+	var meaning = JSON.parse(text);
+	console.log(meaning);
+	notification_text = "";
+	for (var i in meaning.results){
+		notification_text += meaning.results[i].part_of_speech.toString() + ":" + meaning.results[i].senses[0].definition[0];
+		notification_text += '\n\n';
+	}
+	
+	if (Notification.permission === "granted") {
+		// If it's okay let's create a notification
+		var notification = new Notification("Hi there!", {
+								body: notification_text
+							});
+  	} else {
+			Notification.requestPermission(function (permission) {
+				// If the user accepts, let's create a notification
+				if (permission === "granted") {
+					var notification = new Notification("Hi there!", {
+					body: notification_text
+				});
+			}
+		});
+	}
 }
