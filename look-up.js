@@ -4,7 +4,7 @@ document.onmouseup = function() {
     var words = text.split(" ");
     for(var i in words){
         if(words[i]){
-			httpGetAsync("http://api.pearson.com/v2/dictionaries/ldoce5/entries?headword=" + words[i] + "&limit=3&apikey=iXNRYmPiIg8DFaWQsqm3BATO6yKs3qCw", words[i], reqListener);
+			httpGetAsync("http://api.pearson.com/v2/dictionaries/ldoce5/entries?headword=" + words[i] + "&limit=3&apikey=######################", words[i], reqListener);
         }
     }
 };

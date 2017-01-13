@@ -1,14 +1,4 @@
 {
-    "browser_action": {
-        "browser_style": true,
-        "default_icon": {
-            "16": "button/16.png",
-            "32": "button/32.png"
-        },
-        "default_title": "Hi There",
-        "default_popup": "popup/look-up.html"
-    },
-    
     "content_scripts":[{
         "matches": ["<all_urls>"],
         "js": ["look-up.js"]
