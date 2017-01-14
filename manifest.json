@@ -1,4 +1,12 @@
 {
+	"commands": {
+		"toggle-read-mode": {
+			"suggested_key": {
+				"default": "Ctrl+Alt+H"
+			},
+			"description": "Toggle between read and synonym mode. Default is read mode."
+		}
+	},
     "content_scripts":[{
         "matches": ["<all_urls>"],
         "js": ["look-up.js"]

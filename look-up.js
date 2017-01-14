@@ -4,7 +4,7 @@ document.onmouseup = function() {
     var words = text.split(" ");
     for(var i in words){
         if(words[i]){
-			httpGetAsync("http://api.pearson.com/v2/dictionaries/ldoce5/entries?headword=" + words[i] + "&limit=3&apikey=######################", words[i], reqListener);
+			httpGetAsync("http://api.pearson.com/v2/dictionaries/ldoce5/entries?"+ mode + "=" + words[i] + "&limit=3&apikey=########################", words[i], reqListener);
         }
     }
 };
@@ -32,7 +32,6 @@ function reqListener(word) {
 	return function(){
 		text = this.responseText;
 		var meaning = JSON.parse(text);
-		console.log(meaning.results[0].senses[0].definition[0]);
 		notification_text = "";
 		for (var i in meaning.results){
 			notification_text += meaning.results[i].part_of_speech.toString() + ": " + meaning.results[i].senses[0].definition[0].toString();
@@ -58,5 +57,17 @@ function reqListener(word) {
 }
 
 function transferFailed(){
-	alert("There was an error fetching your data");
+	alert("There was an error fetching your data. Please check your internet connection.");
 }
+
+var mode = "headword";
+
+browser.commands.onCommand.addListener(function(command) {
+  if (command == "toggle-read-mode") {
+    if (mode === "headword"){
+		mode = "synonyms";
+	} else{
+		mode = "headword";
+	}
+  }
+});
