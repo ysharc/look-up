@@ -2,11 +2,17 @@
 document.onmouseup = function() {
     var text = getSelectedText();
     var words = text.split(" ");
-    for(var i in words){
-        if(words[i]){
-			httpGetAsync("http://api.pearson.com/v2/dictionaries/ldoce5/entries?"+ mode + "=" + words[i] + "&limit=3&apikey=########################", words[i], reqListener);
-        }
-    }
+	if (words.length < 5){
+		for(var i in words){
+			if(words[i]){
+				httpGetAsync("http://api.pearson.com/v2/dictionaries/ldoce5/entries?"+ mode + "=" + words[i] + "###############################", words[i], reqListener);
+			}
+		}
+	}else{
+		var notification = new Notification("Look-Up: Suggestion", {
+								body: "Please select less than 5 words at a time. This message is displayed for your own convenience"
+							});
+	}
 };
 
 function getSelectedText() {
@@ -34,15 +40,31 @@ function reqListener(word) {
 		var meaning = JSON.parse(text);
 		notification_text = "";
 		for (var i in meaning.results){
-			notification_text += meaning.results[i].part_of_speech.toString() + ": " + meaning.results[i].senses[0].definition[0].toString();
-			notification_text += '\n\n';
+			if(meaning.results[i].part_of_speech && meaning.results[i].senses[0].definition){
+				notification_text += meaning.results[i].part_of_speech.toString() + ": " + meaning.results[i].senses[0].definition[0].toString();
+				notification_text += '\n\n';
+			} else if(meaning.results[i].senses[0].definition){
+				notification_text += meaning.results[i].headword.toString() + ": " + meaning.results[i].senses[0].definition[0].toString();
+				notification_text += '\n\n';
+			}
 		}
-		
+		if(!notification_text){
+			error = true;
+			notification_text = "Sorry we couldn't find the word " + word + " in pearson dictionary.\n\n Please click this notification to know the meaning"; 
+		} else{
+			error = false;
+		}
 		if (Notification.permission === "granted") {
 			// If it's okay let's create a notification
 			var notification = new Notification(word, {
 									body: notification_text
 								});
+			if(error){
+				notification.onclick = function(){
+					window.open("http://google.com/search?q="+word);
+					window.focus();
+				}
+			}
 		} else {
 				Notification.requestPermission(function (permission) {
 					// If the user accepts, let's create a notification
@@ -50,6 +72,12 @@ function reqListener(word) {
 						var notification = new Notification(word, {
 						body: notification_text
 					});
+					if(error){
+						notification.onclick = function(){
+							window.open("http://google.com/search?q="+word);
+							window.focus();
+						}
+					}
 				}
 			});
 		}
@@ -57,17 +85,5 @@ function reqListener(word) {
 }
 
 function transferFailed(){
-	alert("There was an error fetching your data. Please check your internet connection.");
+	alert("Look-Up Addon:\n\nThere was an error fetching your data. Please check your internet connection.");
 }
-
-var mode = "headword";
-
-browser.commands.onCommand.addListener(function(command) {
-  if (command == "toggle-read-mode") {
-    if (mode === "headword"){
-		mode = "synonyms";
-	} else{
-		mode = "headword";
-	}
-  }
-});
