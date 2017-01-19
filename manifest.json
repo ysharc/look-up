@@ -2,24 +2,23 @@
 	"applications": {
 	"gecko": {
 			"id": "addon@example.com",
-			"strict_min_version": "42.0",
-			"strict_max_version": "51.*"
+			"strict_min_version": "48.0"
 		}
 	},
 	"browser_action": {
 		"browser_style": true,
-		"default_icon": "icon/look-up.png",
+		"default_icon": "icons/look-up.png",
 		"default_title": "Highlight a word to show meaning",
 		"default_popup": "pop_up/look-up.html"
 	},
 
 	"background": {
-		"scripts": ["background_scripts/look-up-background.js"]
+		"scripts": ["look-up-background.js"]
 	},
 
 	"content_scripts":[{
         "matches": ["<all_urls>"],
-        "js": ["content_scripts/look-up-content.js"]
+        "js": ["look-up-content.js"]
     }],
     
     "description": "Provides meaning of highlighted words",
@@ -45,5 +44,5 @@
 		"storage"
 	],
     
-    "version": "0.1"
+    "version": "0.2"
 }
