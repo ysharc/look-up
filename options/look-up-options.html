@@ -2,14 +2,37 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<link rel="stylesheet" href="options/look-up-options.css">
+		<link rel="stylesheet" href="look-up-options.css">
 	</head>
 	<body>
-		<form>
-			<input type="radio" name="mode" id="look-up-read-mode" checked> Read mode <br>
-			<input type="radio" name="mode"> Silent mode <br>
-			<input type="checkbox" name="option" id="look-up-automatic"> Automatically switch to silent mode, when I select more than 10 words.
-			<button type="submit" id="save">Save Options</button>
+		<form class="boxes container">
+			<ul>
+			<li>
+				<input type="radio" id="look-up-read-mode" name="selector">
+				<label for="look-up-read-mode">
+					Read Mode<br>
+					Provides meaning for a highlighted word.
+					Ideal when you're reading something
+				</label>
+				
+				<div class="check"></div>
+			</li>
+			
+			<li>
+				<input type="radio" id="look-up-silent-mode" name="selector">
+				<label for="look-up-silent-mode">
+					Silent Mode<br>
+					Doesn't search for a highlighted word.
+					Ideal when you're doing sensitive work.
+				</label>
+				
+				<div class="check"><div class="inside"></div></div>
+			</li>
+			
+			</ul>
+			<input type="checkbox" name="option" id="look-up-automatic"> 
+			<label for="look-up-automatic">Automatically switch to silent mode, when I select more than 25 words.</label> <br>
+			<button type="button" id="save" onclick="saveOptions();">Save Options</button>
 		</form>
 		<script src="look-up-options.js"></script>
 	</body>
