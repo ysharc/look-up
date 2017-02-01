@@ -82,6 +82,8 @@ function notifyMeaning(word, text) {
 		error = true;
 		notification_text = "Sorry we couldn't find the word " + word + " in pearson dictionary.\n\n Please click this notification to know the meaning"; 
 	}
+	showToolTip(word, notification_text);
+	/*
 	if (Notification.permission === "granted") {
 		// If it's okay let's create a notification
 		
@@ -110,7 +112,25 @@ function notifyMeaning(word, text) {
 				}
 			}
 		});
-	}
+	}*/
+}
+
+function showToolTip(word, text){
+	var selection = window.getSelection(),
+		range = selection.getRangeAt(0),
+		rect = range.getBoundingClientRect(),
+		div = document.createElement("div");
+	div.id = "look_up_meaning";
+	div.style.borderBottom = "2px solid black";
+	div.style.backgroundColor = "black";
+	div.style.color = "white";
+	div.style.position = "fixed";
+	div.style.display = "inline-block";
+	div.style.top = rect.top + "px";
+	div.style.left = rect.left + "px";
+	div.innerText = text;
+	document.body.appendChild(div);
+	var look_up_meaning = document.getElementById("look_up_meaning");
 }
 
 // =============================================
@@ -126,5 +146,5 @@ port.onMessage.addListener(function(message) {
 	if (message.error)
 		alert(message.error);
 	if (message.word)
-		notifyMeaning(message.word, message.text);
+		notifyMeaning(message.word, message.text);//notifyMeaning(message.word, message.text);
 });

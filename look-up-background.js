@@ -42,7 +42,7 @@ function connected(port) {
 		} else{
 			for(var i in words){
 				if (words[i])
-					getMeaning("http://api.pearson.com/v2/dictionaries/ldoce5/entries?headword=" + words[i] + "###############################", words[i], sendMeaning);
+					getMeaning("http://api.pearson.com/v2/dictionaries/ldoce5/entries?headword=" + words[i] + "&apikey=iXNRYmPiIg8DFaWQsqm3BATO6yKs3qCw&limit=3", words[i], sendMeaning);
 			}
 		}
 	});
