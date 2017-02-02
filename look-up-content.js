@@ -2,6 +2,8 @@ var read_mode = true;
 var auto_mode = false;
 var listener_set = false;
 var doc = document;
+var box_present = false;
+var maximized = true;
 
 function onError(error){
 	alert(error);
@@ -72,6 +74,10 @@ function notifyMeaning(word, text) {
 	for (var i in meaning.results){
 		if(meaning.results[i].part_of_speech && meaning.results[i].senses[0].definition){
 			notification_text += meaning.results[i].part_of_speech.toString() + ": " + meaning.results[i].senses[0].definition[0].toString();
+			notification_text += "<br><br>";
+		} else if(meaning.results[i].senses[0].definition){
+			notification_text += meaning.results[i].headword.toString() + ": " + meaning.results[i].senses[0].definition[0].toString();
+			notification_text += "<br><br>";
 			notification_text += "\n\n";
 		} else if(meaning.results[i].senses[0].definition){
 			notification_text += meaning.results[i].headword.toString() + ": " + meaning.results[i].senses[0].definition[0].toString();
@@ -116,21 +122,44 @@ function notifyMeaning(word, text) {
 }
 
 function showToolTip(word, text){
-	var selection = window.getSelection(),
-		range = selection.getRangeAt(0),
-		rect = range.getBoundingClientRect(),
-		div = document.createElement("div");
-	div.id = "look_up_meaning";
-	div.style.borderBottom = "2px solid black";
-	div.style.backgroundColor = "black";
-	div.style.color = "white";
-	div.style.position = "fixed";
-	div.style.display = "inline-block";
-	div.style.top = rect.top + "px";
-	div.style.left = rect.left + "px";
-	div.innerText = text;
-	document.body.appendChild(div);
-	var look_up_meaning = document.getElementById("look_up_meaning");
+	console.log("tooltip called!");
+	if (!box_present)
+		insertBox();box_present = true;
+	appendMeaning(word, text);
+}
+
+function createBox(){
+	var meaning_box = document.createElement("aside");
+	meaning_box.id = "look_up_meaning_box";
+	meaning_box.style.border = "1px solid black";
+	meaning_box.style.position = "fixed";
+	meaning_box.style.top = "55vh";
+	meaning_box.style.left = "78vw";
+	meaning_box.style.height = "45vh";
+	meaning_box.style.width = "20vw";
+	meaning_box.style.overflowY = "scroll";
+	meaning_box.style.zIndex = "1000";
+	return meaning_box;
+}
+
+function insertBox(){
+	console.log("insertBox called!");
+	var meaning_box = createBox();
+	document.body.appendChild(meaning_box);
+	var look_up_meaning_box = document.getElementById("look_up_meaning_box");
+	look_up_meaning_box.innerHTML = '<header style="background:black;color:white;height:36px;width:inherit;position:fixed;margin-bottom:4px;"><h4 style="float:left;margin:4px;">Look-Up</h4><button style="float:right;height:24px;margin:4px;"></button><button onclick="lookUpToggle()" style="float:right;height:24px;margin:4px"></button></header><article id="look_up_text_area" style="margin-top:40px;"></article>';
+}
+
+function appendMeaning(word, text){
+	var text_area = document.getElementById("look_up_text_area");
+	var look_up_meaning = document.createElement("div");
+	look_up_meaning.innerHTML = '<div class="look_up_meaning" style="background-color:grey;color:black;margin:4px;border-radius:9px;">' + '<h5>' + word + '</h5>' + '<p>' + text + '</p></div>';
+	text_area.appendChild(look_up_meaning);
+}
+
+function lookUpToggle(){
+	var look_up_meaning_box = document.getElementById("look_up_meaning_box");
+	look_up_meaning_box.style.top = maximized ? "98vh" : "55vh";
 }
 
 // =============================================
